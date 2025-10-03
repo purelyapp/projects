@@ -1,0 +1,268 @@
+# Purely Development - Cursor AI Rules
+
+## Project Overview
+
+This is Purely Development, a comprehensive template for all new development projects. It enables AI-powered agents to autonomously manage software development from planning to deployed code.
+
+## Core Principles
+
+- Use TypeScript for all new code
+- Follow ESLint and Prettier configurations
+- Use functional components with hooks for React
+- Implement proper error handling
+- Add comprehensive JSDoc comments
+- Write unit tests for all functions
+- Use meaningful variable and function names
+- Always use MCP tools for external integrations
+- Manage tasks through Linear workflow
+- Communicate via GitHub/Linear comments
+
+## MCP Integration Requirements
+
+### Always Use MCP Tools
+
+- GitHub MCP for all repository operations
+- Linear MCP for task management
+- Notion MCP for documentation
+- Supabase MCP for database operations
+
+### Required MCP Workflow
+
+1. **Task Initialization**: Get task from Linear, update status to "In Progress"
+2. **Analysis**: Use MCP tools to analyze requirements and existing code
+3. **Implementation**: Create/update files using GitHub MCP
+4. **Testing**: Run tests and verify functionality
+5. **Review**: Create PR using GitHub MCP, update Linear status to "In Review"
+6. **Completion**: Update Linear to "Done", post summary
+
+### MCP Communication
+
+- Post status updates to Linear comments
+- Create GitHub PRs with detailed descriptions
+- Use Notion for documentation updates
+- Always include Linear issue references in commits
+
+## Code Standards
+
+### TypeScript Guidelines
+
+```typescript
+// Always use proper typing
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: "admin" | "user" | "guest";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Use JSDoc for complex functions
+/**
+ * Fetches a user by ID from the API
+ * @param id - The user ID
+ * @returns Promise resolving to user data or null if not found
+ */
+async function fetchUser(id: string): Promise<User | null> {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+}
+```
+
+### React Component Guidelines
+
+```typescript
+// Use functional components with proper typing
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  variant?: "primary" | "secondary";
+  disabled?: boolean;
+}
+
+export function Button({
+  children,
+  onClick,
+  variant = "primary",
+  disabled = false,
+}: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`btn btn-${variant}`}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+### Testing Requirements
+
+```typescript
+// Write comprehensive tests
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Button } from "./Button";
+
+describe("Button", () => {
+  it("renders with correct text", () => {
+    render(<Button onClick={() => {}}>Click me</Button>);
+    expect(screen.getByText("Click me")).toBeInTheDocument();
+  });
+
+  it("calls onClick when clicked", () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick}>Click me</Button>);
+
+    fireEvent.click(screen.getByText("Click me"));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+## File Structure
+
+- Place components in `/components`
+- Place utilities in `/lib`
+- Place API routes in `/app/api`
+- Place types in `/types`
+- Place tests in `/__tests__`
+
+## Git Workflow
+
+- Create feature branches from main
+- Use conventional commit messages with Linear issue references
+- Create pull requests for all changes
+- Ensure all tests pass before merging
+- Use MCP tools for all Git operations
+
+## AI Agent Guidelines
+
+- Always test code before committing
+- Follow the established patterns
+- Add proper error handling
+- Include comprehensive comments
+- Update documentation when needed
+- Use MCP tools for all external operations
+- Post regular status updates to Linear
+- Create detailed PR descriptions
+
+## Security
+
+- Never commit API keys or secrets
+- Use environment variables for configuration
+- Validate all inputs
+- Implement proper authentication
+- Use MCP tools for secure operations
+
+## Performance
+
+- Optimize for speed and efficiency
+- Use proper caching strategies
+- Minimize bundle size
+- Implement lazy loading where appropriate
+- Monitor performance with MCP tools
+
+## MCP Tool Usage Examples
+
+### GitHub Operations
+
+```typescript
+// Create a pull request
+await mcp_github_create_pull_request({
+  owner: "your-org",
+  repo: "your-repo",
+  title: "feat: add user authentication",
+  head: "feature/user-auth",
+  base: "main",
+  body: "Implements user authentication system\n\nCloses LIN-123",
+});
+
+// Add issue comment
+await mcp_github_add_issue_comment({
+  owner: "your-org",
+  repo: "your-repo",
+  issue_number: 123,
+  body: "🤖 **Agent Update**\n\nImplementation complete, ready for review",
+});
+```
+
+### Linear Operations
+
+```typescript
+// Update issue status
+await mcp_linear_update_issue({
+  id: "issue-id",
+  state: "In Progress",
+});
+
+// Create issue comment
+await mcp_linear_create_comment({
+  issueId: "issue-id",
+  body: "📊 **Progress Update**\n\nStatus: Implementation in progress\n\n**Completed**:\n- [x] Analysis\n- [x] Planning\n- [ ] Implementation\n- [ ] Testing",
+});
+```
+
+### Notion Operations
+
+```typescript
+// Search for documentation
+(await mcp_Notion_notion) -
+  search({
+    query: "user authentication",
+    query_type: "internal",
+  });
+
+// Create documentation page
+(await mcp_Notion_notion) -
+  create -
+  pages({
+    pages: [
+      {
+        properties: { title: "User Authentication Guide" },
+        content: "# User Authentication\n\nThis guide covers...",
+      },
+    ],
+  });
+```
+
+## Error Handling
+
+- Always wrap MCP calls in try-catch blocks
+- Post error details to Linear comments
+- Update issue status to "Blocked" on errors
+- Request human intervention when needed
+
+## Status Reporting
+
+- Post daily status updates to Linear
+- Create weekly summaries in GitHub
+- Track performance metrics
+- Report completion summaries
+
+## Quality Assurance
+
+- Run health checks before starting work
+- Test all MCP connections
+- Verify code quality with linting
+- Ensure test coverage meets standards
+- Validate all integrations
+
+## Continuous Improvement
+
+- Learn from feedback and errors
+- Update processes based on results
+- Track performance metrics
+- Optimize MCP tool usage
+- Share knowledge with team
+
+Remember: You are an extension of the Purely Development team. Your work should be indistinguishable from human developers, but with the efficiency and consistency of AI. Always prioritize quality, communication, and following established processes while leveraging MCP tools for all external operations.

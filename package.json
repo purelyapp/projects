@@ -1,14 +1,33 @@
 {
-  "name": "projects",
+  "name": "purely-development-template",
   "version": "1.0.0",
+  "description": "Purely Development - A comprehensive template for all new development projects",
   "private": true,
   "scripts": {
-    "build": "cd sandbox && npm run build",
-    "dev": "cd sandbox && npm run dev",
-    "start": "cd sandbox && npm start",
-    "install": "cd sandbox && npm install"
+    "build": "cd template && npm run build",
+    "dev": "cd template && npm run dev",
+    "start": "cd template && npm start",
+    "test": "cd template && npm test",
+    "lint": "cd template && npm run lint",
+    "create-project": "node scripts/create-new-project.js",
+    "health-check": "cd template && npm run health-check",
+    "test-mcp": "node scripts/test-mcp-connections.js",
+    "setup": "npm install && cd template && npm install && npm run health-check && npm run test-mcp"
   },
   "workspaces": [
-    "sandbox"
-  ]
+    "template"
+  ],
+  "keywords": [
+    "template",
+    "development",
+    "nextjs",
+    "typescript",
+    "supabase",
+    "vercel"
+  ],
+  "author": "Purely Development Team",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }

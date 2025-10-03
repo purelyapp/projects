@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "cd sandbox && npm run build",
+  "outputDirectory": "sandbox/.next",
+  "installCommand": "cd sandbox && npm install"
+}
