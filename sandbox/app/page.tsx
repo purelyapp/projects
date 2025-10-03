@@ -1,5 +1,6 @@
 import Image from "next/image";
 import SupabaseExample from "@/components/SupabaseExample";
+import { LoadingSpinner, LoadingSpinnerInline } from "@/components/LoadingSpinner";
 
 export default function Home() {
   return (
@@ -27,6 +28,64 @@ export default function Home() {
         </ol>
 
         <SupabaseExample />
+
+        {/* Loading Spinner Examples */}
+        <div className="flex flex-col gap-8 items-center w-full">
+          <h2 className="text-2xl font-bold text-center">Loading Spinner Examples</h2>
+          
+          {/* Basic Spinners */}
+          <div className="flex flex-wrap gap-6 items-center justify-center">
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Small</h3>
+              <LoadingSpinner size="small" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Medium</h3>
+              <LoadingSpinner size="medium" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Large</h3>
+              <LoadingSpinner size="large" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">XL</h3>
+              <LoadingSpinner size="xl" />
+            </div>
+          </div>
+
+          {/* Color Variants */}
+          <div className="flex flex-wrap gap-6 items-center justify-center">
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Primary</h3>
+              <LoadingSpinner variant="primary" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Success</h3>
+              <LoadingSpinner variant="success" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Warning</h3>
+              <LoadingSpinner variant="warning" />
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-2">Error</h3>
+              <LoadingSpinner variant="error" />
+            </div>
+          </div>
+
+          {/* With Text */}
+          <div className="text-center">
+            <h3 className="text-sm font-medium mb-2">With Text</h3>
+            <LoadingSpinner size="large" text="Loading data..." />
+          </div>
+
+          {/* Inline Spinner */}
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-medium">Inline:</h3>
+            <LoadingSpinnerInline size="small" />
+            <span className="text-sm text-gray-600">Saving...</span>
+          </div>
+        </div>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a

@@ -10,18 +10,26 @@ import { supabase } from '@/lib/supabase'
 export default function SupabaseExample() {
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking')
   const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+    
     const testConnection = async () => {
       try {
         // Test the connection by fetching the current user
         const { data, error } = await supabase.auth.getUser()
         
-        if (error) {
+        // If there's an auth error but it's just "no session", that's actually a successful connection
+        if (error && error.message === 'Auth session missing!') {
+          setConnectionStatus('connected')
+          setError(null)
+        } else if (error) {
           setConnectionStatus('error')
           setError(error.message)
         } else {
           setConnectionStatus('connected')
+          setError(null)
         }
       } catch (err) {
         setConnectionStatus('error')
@@ -31,6 +39,21 @@ export default function SupabaseExample() {
 
     testConnection()
   }, [])
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className="p-4 border rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">Supabase Connection Status</h3>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-yellow-500" />
+            <span className="capitalize">checking</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="p-4 border rounded-lg">
