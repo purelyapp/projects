@@ -1,0 +1,14 @@
+{
+  "name": "projects",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd sandbox && npm run build",
+    "dev": "cd sandbox && npm run dev",
+    "start": "cd sandbox && npm start",
+    "install": "cd sandbox && npm install"
+  },
+  "workspaces": [
+    "sandbox"
+  ]
+}
