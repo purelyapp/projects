@@ -17,14 +17,14 @@ export default function SupabaseExample() {
     
     const testConnection = async () => {
       try {
-        // Test the connection by fetching the current user
-        const { data, error } = await supabase.auth.getUser()
+        // Test the connection by trying to access the profiles table
+        // This is a better test than auth.getUser() since we don't need authentication
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('count')
+          .limit(1)
         
-        // If there's an auth error but it's just "no session", that's actually a successful connection
-        if (error && error.message === 'Auth session missing!') {
-          setConnectionStatus('connected')
-          setError(null)
-        } else if (error) {
+        if (error) {
           setConnectionStatus('error')
           setError(error.message)
         } else {
