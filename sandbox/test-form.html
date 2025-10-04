@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Manager Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project Manager Test Form</h1>
+    
+    <form id="projectForm">
+        <div class="form-group">
+            <label for="projectName">Project Name *</label>
+            <input type="text" id="projectName" name="projectName" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Project Description *</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="objectives">Project Objectives</label>
+            <textarea id="objectives" name="objectives" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="requirements">Requirements</label>
+            <textarea id="requirements" name="requirements" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="timeline">Timeline</label>
+            <input type="text" id="timeline" name="timeline">
+        </div>
+        
+        <div class="form-group">
+            <label for="budget">Budget</label>
+            <input type="text" id="budget" name="budget">
+        </div>
+        
+        <div class="form-group">
+            <label for="team">Team Members</label>
+            <textarea id="team" name="team" rows="2"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="deliverables">Deliverables</label>
+            <textarea id="deliverables" name="deliverables" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="risks">Potential Risks</label>
+            <textarea id="risks" name="risks" rows="3"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="successCriteria">Success Criteria</label>
+            <textarea id="successCriteria" name="successCriteria" rows="3"></textarea>
+        </div>
+        
+        <button type="submit">Create Project & Generate MD File</button>
+    </form>
+    
+    <div id="status"></div>
+    
+    <script>
+        document.getElementById('projectForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '<div class="status">Submitting...</div>';
+            
+            try {
+                const response = await fetch('/api/project-manager', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Check if this is a file download response
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/markdown')) {
+                    // Handle file download
+                    const filename = response.headers.get('X-Filename') || `${data.projectName.replace(/[^a-zA-Z0-9]/g, '_')}.md`;
+                    const notionSuccess = response.headers.get('X-Notion-Success') === 'true';
+                    
+                    // Create blob and download
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    statusDiv.innerHTML = `
+                        <div class="status success">
+                            <strong>Success!</strong><br>
+                            Project created successfully!<br>
+                            File downloaded: ${filename}<br>
+                            Notion integration: ${notionSuccess ? 'Success' : 'Mock mode (no API key)'}
+                        </div>
+                    `;
+                    
+                    // Reset form
+                    this.reset();
+                } else {
+                    // Handle JSON response (error case)
+                    const result = await response.json();
+                    throw new Error(result.error || 'Failed to create project');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = `
+                    <div class="status error">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
